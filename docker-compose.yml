@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    ports:
+       - "8051:8050"
+    environment:
+      ENABLE_MAINTENANCE: "1"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models

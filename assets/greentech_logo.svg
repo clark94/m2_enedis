@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="140" viewBox="0 0 320 140">
+  <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#16324F"/><stop offset="1" stop-color="#2A9D8F"/></linearGradient></defs>
+  <rect width="320" height="140" rx="24" fill="url(#g)"/>
+  <path d="M45 76 L86 42 L127 76 V112 H45 Z" fill="white" opacity="0.95"/>
+  <path d="M82 55 L69 83 H84 L75 104 L104 72 H88 L98 55 Z" fill="#F4D35E"/>
+  <text x="145" y="66" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="white">GreenTech</text>
+  <text x="145" y="96" font-family="Arial, sans-serif" font-size="22" fill="#DFF7F3">DPE · M2 SISE</text>
+</svg>

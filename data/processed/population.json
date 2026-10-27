@@ -1,0 +1,24 @@
+{
+  "retrieved_at": "2026-10-27T10:12:31.708112+00:00",
+  "description": "Population publi\u00e9e par API \u00c9tat ; mill\u00e9sime non expos\u00e9 dans la r\u00e9ponse. Variable de contexte sans causalit\u00e9 pr\u00e9sum\u00e9e.",
+  "departements": [
+    {
+      "code_departement_ban": "38",
+      "population_departement": 1298990,
+      "source": "https://geo.api.gouv.fr/communes?codeDepartement=38&fields=population,code",
+      "communes": 512
+    },
+    {
+      "code_departement_ban": "42",
+      "population_departement": 774133,
+      "source": "https://geo.api.gouv.fr/communes?codeDepartement=42&fields=population,code",
+      "communes": 320
+    },
+    {
+      "code_departement_ban": "69",
+      "population_departement": 1914667,
+      "source": "https://geo.api.gouv.fr/communes?codeDepartement=69&fields=population,code",
+      "communes": 266
+    }
+  ]
+}

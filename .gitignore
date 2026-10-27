@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Donnees brutes volumineuses reproductibles via API ADEME
+data/raw/*.csv
+!data/raw/README.md
+
+# Artefacts temporaires
+*.log
+*.tmp
+
+# Environnement Python 3.10
+.venv310/
+# Secrets Streamlit
+.streamlit/secrets.toml

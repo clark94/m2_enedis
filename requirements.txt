@@ -1,0 +1,12 @@
+dash>=3.2,<4
+gunicorn>=23,<24
+pandas==2.2.3
+numpy==2.3.5
+scipy==1.17.0
+scikit-learn==1.7.2
+joblib>=1.5,<2
+plotly==7.1.0
+folium==0.20.0
+requests>=2.32,<3
+kaleido==0.2.1
+pytest>=8,<10

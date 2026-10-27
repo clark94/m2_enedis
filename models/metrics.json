@@ -1,0 +1,234 @@
+{
+  "dataset": {
+    "rows": 65467,
+    "classification_rows": 65467,
+    "regression_rows": 65455,
+    "sha256": "e31d504b62e53f657ba110de9240e2c1ff9d66679734accdec7c093467bdc5e2"
+  },
+  "versions": {
+    "python": "3.12.16",
+    "scikit_learn": "1.7.2",
+    "pandas": "2.2.3",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "classes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "classification_target": "etiquette_dpe",
+  "training_mode": "quick_fixed_rf_parameters",
+  "features": [
+    "periode_construction",
+    "hauteur_sous_plafond",
+    "surface_habitable_logement",
+    "type_batiment",
+    "type_energie_principale_chauffage",
+    "qualite_isolation_enveloppe",
+    "qualite_isolation_murs",
+    "qualite_isolation_menuiseries",
+    "qualite_isolation_plancher_bas",
+    "code_departement_ban",
+    "ventilation_posterieure_2012",
+    "annee_construction",
+    "population_departement"
+  ],
+  "enrichment": {
+    "retrieved_at": "2026-10-27T10:12:31.708112+00:00",
+    "description": "Population publiée par API État ; millésime non exposé dans la réponse. Variable de contexte sans causalité présumée.",
+    "departements": [
+      {
+        "code_departement_ban": "38",
+        "population_departement": 1298990,
+        "source": "https://geo.api.gouv.fr/communes?codeDepartement=38&fields=population,code",
+        "communes": 512
+      },
+      {
+        "code_departement_ban": "42",
+        "population_departement": 774133,
+        "source": "https://geo.api.gouv.fr/communes?codeDepartement=42&fields=population,code",
+        "communes": 320
+      },
+      {
+        "code_departement_ban": "69",
+        "population_departement": 1914667,
+        "source": "https://geo.api.gouv.fr/communes?codeDepartement=69&fields=population,code",
+        "communes": 266
+      }
+    ]
+  },
+  "classification": {
+    "baseline_logistic_regression": {
+      "accuracy": 0.5566417188534188,
+      "precision": 0.4745562403851175,
+      "recall": 0.5425179894763719,
+      "f1": 0.4894364072809426,
+      "roc_auc": 0.8993378754099682,
+      "confusion_matrix": [
+        [
+          1964,
+          614,
+          63,
+          10,
+          2,
+          0,
+          4
+        ],
+        [
+          277,
+          1652,
+          656,
+          126,
+          10,
+          5,
+          2
+        ],
+        [
+          331,
+          1532,
+          4387,
+          1329,
+          215,
+          58,
+          73
+        ],
+        [
+          30,
+          42,
+          231,
+          1667,
+          834,
+          259,
+          204
+        ],
+        [
+          3,
+          4,
+          30,
+          452,
+          686,
+          372,
+          310
+        ],
+        [
+          1,
+          1,
+          3,
+          57,
+          173,
+          216,
+          248
+        ],
+        [
+          0,
+          1,
+          1,
+          10,
+          42,
+          93,
+          361
+        ]
+      ]
+    },
+    "selected_random_forest": {
+      "accuracy": 0.6589786670739779,
+      "precision": 0.5495970635852144,
+      "recall": 0.6065388716839701,
+      "f1": 0.5678303275322082,
+      "roc_auc": 0.9321023933772352,
+      "confusion_matrix": [
+        [
+          2220,
+          373,
+          52,
+          11,
+          0,
+          1,
+          0
+        ],
+        [
+          207,
+          1978,
+          444,
+          90,
+          7,
+          2,
+          0
+        ],
+        [
+          230,
+          877,
+          5451,
+          1133,
+          148,
+          57,
+          29
+        ],
+        [
+          6,
+          18,
+          204,
+          1940,
+          688,
+          285,
+          126
+        ],
+        [
+          0,
+          0,
+          28,
+          434,
+          794,
+          374,
+          227
+        ],
+        [
+          2,
+          0,
+          2,
+          52,
+          202,
+          235,
+          206
+        ],
+        [
+          0,
+          1,
+          2,
+          6,
+          56,
+          118,
+          325
+        ]
+      ]
+    },
+    "best_params_lr": {
+      "model__C": 10.0
+    },
+    "best_params_rf": {
+      "quick": true
+    }
+  },
+  "regression": {
+    "target": "conso_chauffage_ef",
+    "target_clipping": false,
+    "baseline_linear_regression": {
+      "rmse": 18727.291505464636,
+      "mae": 4915.473890646081,
+      "r2": 0.2646785903654443
+    },
+    "selected_random_forest": {
+      "rmse": 14800.642825600458,
+      "mae": 2535.982017725646,
+      "r2": 0.5407084809534881
+    },
+    "best_params_rf": {
+      "quick": true
+    }
+  }
+}

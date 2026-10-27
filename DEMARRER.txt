@@ -1,0 +1,15 @@
+VERSION CORRIGÉE — DASH / PYTHON 3.12
+
+1. Installer Python 3.12.
+2. Ouvrir un terminal dans ce dossier.
+3. python -m venv .venv
+4. Windows : .venv\Scripts\activate
+   Linux/Mac : source .venv/bin/activate
+5. pip install -r requirements.txt
+6. python app.py
+7. Ouvrir http://localhost:8051
+
+Avec Docker : docker compose up --build
+La commande Streamlit ne correspond plus à cette version.
+
+Lire docs/CONFORMITE.md avant le rendu. Vidéo à réaliser par Clark.

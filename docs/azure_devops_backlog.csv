@@ -1,0 +1,10 @@
+Work Item Type,Title,Description
+Task,Valider exploration et carte,"Tester filtres, quatre graphiques, marqueurs et recherche"
+Task,Valider prédiction,"Tester classes A à G et consommation, expliquer les limites"
+Task,Valider exports,Télécharger et ouvrir les fichiers CSV et PNG
+Task,Valider maintenance locale,Tester actualisation et réentraînement sur une copie
+Task,Mettre à jour le rapport ML,Comparer les métriques avec models/metrics.json et vérifier 4 à 6 pages
+Task,Publier GitHub,Créer le dépôt public m2_enedis et contrôler son contenu
+Task,Déployer Render,"Déployer et vérifier l’URL publique, maintenance désactivée"
+Task,Enregistrer vidéo,Montrer installation locale et fonctionnalités en cinq minutes maximum
+Task,Vérifier organisation individuelle,Demander à l’enseignant la validation du travail individuel et des rôles
