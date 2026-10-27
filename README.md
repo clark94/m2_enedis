@@ -23,8 +23,6 @@ Ouvrir http://localhost:8051. Les données et modèles sont persistés dans les 
 Créer le dépôt public **m2_enedis**, placer les fichiers à sa racine, pousser sur GitHub. Dans Render : New > Blueprint > sélectionner le dépôt ; render.yaml configure Docker et /health. Ne pas activer ENABLE_MAINTENANCE sur le serveur public.
 
 🌐 [Accéder à l’application GreenTech DPE](https://m2-enedis-z6dh.onrender.com/)
-**Vidéo YouTube privée (5 min max) : à réaliser par Clark, puis renseigner le lien.**
-**Azure DevOps : suivi des tâches commencé ; mettre à jour leur état et ajouter le lien accessible au professeur.**
 
 ## Reproduction
 ```bash
