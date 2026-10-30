@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import pandas as pd
+import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
@@ -26,34 +27,40 @@ def dpe_bar(df: pd.DataFrame):
 
 def heating_histogram(df: pd.DataFrame):
     values = df.loc[df["conso_chauffage_ef"].between(0, df["conso_chauffage_ef"].quantile(0.99)), "conso_chauffage_ef"]
-    return px.histogram(
-        values.to_frame(),
-        x="conso_chauffage_ef",
-        nbins=50,
-        title="Distribution de la consommation de chauffage (jusqu'au 99e percentile)",
-        labels={"conso_chauffage_ef": "Consommation de chauffage - énergie finale"},
-    )
+    counts, edges = np.histogram(values.dropna().to_numpy(), bins=50)
+    fig = go.Figure(go.Bar(x=(edges[:-1]+edges[1:])/2, y=counts,
+                          width=np.diff(edges)))
+    fig.update_layout(title="Distribution de la consommation de chauffage (jusqu'au 99e percentile)",
+                      xaxis_title="Consommation de chauffage - énergie finale", yaxis_title="Nombre")
+    return fig
 
 
 def heating_box(df: pd.DataFrame):
-    plot_df = df[df["conso_chauffage_ef"] <= df["conso_chauffage_ef"].quantile(0.99)].copy()
-    return px.box(
-        plot_df,
-        x="etiquette_dpe",
-        y="conso_chauffage_ef",
-        color="etiquette_dpe",
-        color_discrete_map=DPE_COLORS,
-        category_orders={"etiquette_dpe": DPE_ORDER},
-        title="Consommation de chauffage par étiquette DPE",
-        labels={"etiquette_dpe": "Étiquette DPE", "conso_chauffage_ef": "Consommation chauffage EF"},
-    )
+    limit = df["conso_chauffage_ef"].quantile(0.99)
+    fig = go.Figure()
+    for label in DPE_ORDER:
+        values = df.loc[(df.etiquette_dpe == label) & (df.conso_chauffage_ef <= limit),
+                        "conso_chauffage_ef"].dropna()
+        if values.empty:
+            continue
+        q1, median, q3 = values.quantile([.25, .5, .75])
+        iqr = q3-q1
+        inside = values[values.between(q1-1.5*iqr, q3+1.5*iqr)]
+        fig.add_trace(go.Box(name=label, q1=[q1], median=[median], q3=[q3],
+                             lowerfence=[inside.min()], upperfence=[inside.max()],
+                             marker_color=DPE_COLORS[label], boxpoints=False))
+    fig.update_layout(title="Consommation de chauffage par étiquette DPE (≤ 99e percentile)",
+                      xaxis_title="Étiquette DPE", yaxis_title="Consommation chauffage EF")
+    return fig
 
 
 def surface_scatter(df: pd.DataFrame):
     q99 = df["conso_chauffage_ef"].quantile(0.99)
-    plot_df = df[
+    plot_df = df.loc[
         df["surface_habitable_logement"].notna()
-        & df["conso_chauffage_ef"].between(0, q99)
+        & df["conso_chauffage_ef"].between(0, q99),
+        ["surface_habitable_logement", "conso_chauffage_ef", "etiquette_dpe",
+         "nom_commune_ban", "code_departement_ban", "source_dataset"]
     ].copy()
     if len(plot_df) > 7000:
         plot_df = plot_df.sample(7000, random_state=42)
@@ -65,7 +72,8 @@ def surface_scatter(df: pd.DataFrame):
         color_discrete_map=DPE_COLORS,
         category_orders={"etiquette_dpe": DPE_ORDER},
         opacity=0.55,
-        title="Surface habitable et consommation de chauffage",
+        render_mode="webgl",
+        title="Surface habitable et chauffage (≤ 99e percentile ; échantillon ≤ 7 000)",
         labels={"surface_habitable_logement": "Surface habitable (m²)", "conso_chauffage_ef": "Consommation chauffage EF"},
         hover_data=["nom_commune_ban", "code_departement_ban", "source_dataset"],
     )

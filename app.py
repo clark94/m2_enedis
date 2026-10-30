@@ -3,8 +3,10 @@ import os
 import json
 import subprocess
 import sys
+import math
+from functools import lru_cache
 from dash import Dash, html, dcc, Input, Output, State, ALL, ctx, dash_table
-from flask import request, jsonify
+from flask import request, jsonify, Response, stream_with_context
 import pandas as pd
 import plotly.graph_objects as go
 from src.service import dataset, predict, metrics, ROOT, LOCK
@@ -136,7 +138,7 @@ def model_dashboard():
     ])
 
 
-def layout():
+def _build_layout():
     df=dataset()
     controls=[]
     for col in FEATURES:
@@ -156,6 +158,18 @@ def layout():
             dcc.Tab(label='🧪 Modèles et méthode',children=[html.H2('Comparaison des modèles'),html.P('Split 70/30 stratifié pour la classification, preprocessing appris sur train uniquement. Cibles et consommations exclues des prédicteurs.'),model_dashboard(),html.A('API : schéma et exemple',href='/api/schema')]),
             dcc.Tab(label='⚙ Maintenance',children=[html.H2('Actualisation et réentraînement'),html.P('Ces opérations sont disponibles uniquement en mode maintenance local : définir ENABLE_MAINTENANCE=1. Le serveur public doit laisser ce mode désactivé.'),html.Label('DPE reçus depuis (AAAA-MM-JJ)'),dcc.Input(id='since',type='text',value='2026-01-01'),html.Button('Actualiser via ADEME',id='refresh'),html.Button('Réentraîner sur les données actuelles',id='train'),dcc.Loading(html.Div(id='maintenance-result',role='status')),html.P('Après actualisation, recharger la page. Le réentraînement complet peut durer plusieurs minutes.')])
         ]),html.Footer('M2 SISE • Données ouvertes ADEME • Prototype pédagogique')])
+def _layout_stamp():
+    paths = [ROOT/'data/processed/dpe_app.csv', ROOT/'models/metrics.json']
+    return tuple((p.stat().st_mtime_ns, p.stat().st_size) for p in paths)
+
+@lru_cache(maxsize=1)
+def _cached_layout(stamp):
+    # Ne conserver qu'une version ; une actualisation invalide l'ancienne.
+    return _build_layout()
+
+def layout():
+    return _cached_layout(_layout_stamp())
+
 app.layout=layout
 
 
@@ -261,7 +275,18 @@ def filtered(deps,labels,surface):
     df=dataset()
     return df[df.code_departement_ban.isin(deps or []) & df.etiquette_dpe.isin(labels or []) & df.surface_habitable_logement.between(*(surface or [0,1000]))]
 
-@app.callback(Output('graph','figure'),Output('kpis','children'),Output('map','srcDoc'),Output('table','data'),Output('table','columns'),Output('geo-status','children'),Input('departments','value'),Input('labels','value'),Input('surface','value'),Input('chart','value'))
+@app.callback(Output('graph','figure'), Input('departments','value'),
+              Input('labels','value'), Input('surface','value'), Input('chart','value'))
+def update_chart(deps, labels, surface, chart):
+    df = filtered(deps, labels, surface)
+    return CHARTS[chart](df) if not df.empty else go.Figure()
+
+@app.callback(Output('kpis','children'), Output('map','srcDoc'),
+              Output('table','data'), Output('table','columns'), Output('geo-status','children'),
+              Input('departments','value'), Input('labels','value'), Input('surface','value'))
+def update_selection(deps, labels, surface):
+    return explore(deps, labels, surface, None)[1:]
+
 def explore(deps,labels,surface,chart):
     df=filtered(deps,labels,surface)
     cols=['etiquette_dpe','nom_commune_ban','surface_habitable_logement','conso_chauffage_ef']
@@ -271,11 +296,61 @@ def explore(deps,labels,surface,chart):
     sample=geo.sample(min(2000,len(geo)),random_state=42)
     document=exportable_map(sample) if len(sample) else '<p>Aucune coordonnée valide.</p>'
     kpi=f'{len(df):,} logements | F/G : {df.etiquette_dpe.isin(["F","G"]).mean():.1%} | Surface médiane : {df.surface_habitable_logement.median():.1f} m² | Chauffage médian : {df.conso_chauffage_ef.median():.0f}'
-    return CHARTS[chart](df),kpi,document,df[cols].head(1000).astype(object).where(pd.notna(df[cols].head(1000)),None).to_dict('records'),[{'name':c,'id':c} for c in cols],f'{len(df)-len(geo)} coordonnées absentes ou hors fenêtre régionale exclues ; {len(sample)} points affichés.'
+    table = df.loc[:, cols].head(1000).astype(object)
+    table = table.where(pd.notna(table), None)
+    return (CHARTS[chart](df) if chart else go.Figure()),kpi,document,table.to_dict('records'),[{'name':c,'id':c} for c in cols],f'{len(df)-len(geo)} coordonnées absentes ou hors fenêtre régionale exclues ; {len(sample)} points affichés.'
 
-@app.callback(Output('download','data'),Input('csv','n_clicks'),State('departments','value'),State('labels','value'),State('surface','value'),prevent_initial_call=True)
-def export(_,deps,labels,surface):
-    return dcc.send_data_frame(filtered(deps,labels,surface).to_csv,'dpe_selection.csv',index=False)
+
+# Le navigateur télécharge directement le CSV : aucun gros texte CSV dans
+# la réponse JSON de Dash, ni copie base64 dans dcc.Download.
+app.clientside_callback(
+    """function(clicks, deps, labels, surface) {
+        if (!clicks) return window.dash_clientside.no_update;
+        const bounds = surface || [0, 1000];
+        const query = new URLSearchParams({
+            departments: (deps || []).join(','), labels: (labels || []).join(','),
+            min_surface: String(bounds[0]), max_surface: String(bounds[1])
+        });
+        const link = document.createElement('a');
+        link.href = '/api/export.csv?' + query.toString();
+        link.download = 'dpe_selection.csv';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        return window.dash_clientside.no_update;
+    }""",
+    Output('download','data'), Input('csv','n_clicks'),
+    State('departments','value'), State('labels','value'), State('surface','value'),
+    prevent_initial_call=True
+)
+
+@server.get('/api/export.csv')
+def export_csv():
+    source = dataset()
+    deps = request.args.get('departments')
+    labels = request.args.get('labels')
+    deps = sorted(source.code_departement_ban.unique()) if deps is None else [x for x in deps.split(',') if x]
+    labels = list('ABCDEFG') if labels is None else [x for x in labels.split(',') if x]
+    try:
+        low = float(request.args.get('min_surface', 0))
+        high = float(request.args.get('max_surface', 1000))
+        if not all(math.isfinite(v) for v in (low, high)) or low < 0 or high < low:
+            raise ValueError
+        if set(deps) - set(source.code_departement_ban.unique()) or set(labels) - set('ABCDEFG'):
+            raise ValueError
+    except (ValueError, TypeError):
+        return jsonify(error='Filtres invalides.'), 400
+    frame = filtered(deps, labels, [low, high])
+
+    def chunks():
+        yield '\ufeff'  # UTF-8 avec BOM : ouverture correcte des accents dans Excel.
+        yield frame.iloc[:0].to_csv(index=False)
+        for start in range(0, len(frame), 1000):
+            yield frame.iloc[start:start + 1000].to_csv(index=False, header=False)
+
+    return Response(stream_with_context(chunks()), content_type='text/csv; charset=utf-8',
+                    headers={'Content-Disposition': 'attachment; filename="dpe_selection.csv"',
+                             'Cache-Control': 'no-store'})
 
 @app.callback(Output('prediction','children'),Input('predict','n_clicks'),State({'type':'feature','index':ALL},'value'),State({'type':'feature','index':ALL},'id'),prevent_initial_call=True)
 def estimate(_,values,ids):
@@ -326,4 +401,4 @@ def api_predict():
     except (ValueError,TypeError) as exc: return jsonify(error=str(exc)),400
 
 if __name__=='__main__':
-    app.run(host='0.0.0.0',port=int(os.getenv('PORT','8050')),debug=False)
+    app.run(host='0.0.0.0',port=int(os.getenv('PORT','8050')),debug=False,threaded=False)
