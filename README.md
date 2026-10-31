@@ -4,6 +4,12 @@ Application Python **Dash** réalisée dans le cadre du **Master 2 SISE** : expl
 
 🌐 **[Accéder à l’application GreenTech DPE](https://m2-enedis-z6dh.onrender.com/)**
 
+## Vidéo de démonstration
+
+🎬 **[Voir la démonstration — 5 minutes](https://youtu.be/y1og0YCbLkA)**
+
+La vidéo est privée et accessible au professeur, invité par e-mail. Pour la visionner, connectez-vous à YouTube avec le compte Google associé à l’adresse invitée.
+
 > **Premier chargement :** l’application est hébergée sur l’offre gratuite de Render. Après une période d’inactivité, le serveur peut se mettre en veille. Le premier accès peut alors prendre environ une minute, voire davantage selon le chargement de l’application. Merci de patienter ; les interactions sont ensuite plus rapides.
 
 ## Fonctionnalités
@@ -45,7 +51,7 @@ python -m pip install -r requirements.txt
 python app.py
 ```
 
-Ouvrir **http://localhost:8050**.
+Ouvrir [http://localhost:8050](http://localhost:8050).
 
 ### Windows sans activation de l’environnement
 
@@ -64,7 +70,7 @@ Démarrer Docker Desktop, puis ouvrir un terminal dans le dossier contenant `doc
 docker compose up --build
 ```
 
-Ouvrir **http://localhost:8051**.
+Ouvrir [http://localhost:8051](http://localhost:8051).
 
 Docker utilise son propre environnement Python. Les dossiers locaux de données et de modèles sont montés dans le conteneur.
 
