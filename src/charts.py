@@ -46,11 +46,12 @@ def heating_box(df: pd.DataFrame):
         q1, median, q3 = values.quantile([.25, .5, .75])
         iqr = q3-q1
         inside = values[values.between(q1-1.5*iqr, q3+1.5*iqr)]
-        fig.add_trace(go.Box(name=label, q1=[q1], median=[median], q3=[q3],
+        fig.add_trace(go.Box(name=label, x=[label], orientation="v", q1=[q1], median=[median], q3=[q3],
                              lowerfence=[inside.min()], upperfence=[inside.max()],
                              marker_color=DPE_COLORS[label], boxpoints=False))
     fig.update_layout(title="Consommation de chauffage par étiquette DPE (≤ 99e percentile)",
-                      xaxis_title="Étiquette DPE", yaxis_title="Consommation chauffage EF")
+                      xaxis_title="Étiquette DPE", yaxis_title="Consommation chauffage EF",
+                      xaxis=dict(type="category", categoryorder="array", categoryarray=DPE_ORDER))
     return fig
 
 
