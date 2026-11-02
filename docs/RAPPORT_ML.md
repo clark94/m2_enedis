@@ -27,10 +27,11 @@ La séparation aléatoire fournit une validation interne. Elle peut surestimer l
 La régression logistique constitue la référence. Elle utilise des poids de classes équilibrés. Le paramètre C est recherché dans {0.1, 1, 10} par validation croisée à trois plis, selon le F1 macro.
 
 La Random Forest permet de représenter des relations non linéaires. Le mode rapide livré utilise 120 arbres, une profondeur maximale de 14 et au moins 3 observations par feuille. Ces paramètres sont fixes ; ils ne sont pas présentés comme un optimum obtenu par recherche exhaustive. Le script sans --quick propose une recherche complémentaire.
-Modèle	Accuracy	Précision macro	Rappel macro	F1 macro	AUC macro
-Logistique	0,557	0,475	0,543	0,489	0,899
-Random Forest	0,659	0,550	0,607	0,568	0,932
 
+| Modèle | Accuracy | Précision macro | Rappel macro | F1 macro | AUC macro |
+|---|---:|---:|---:|---:|---:|
+| Logistique | 0,557 | 0,475 | 0,543 | 0,489 | 0,899 |
+| Random Forest | 0,659 | 0,550 | 0,607 | 0,568 | 0,932 |
 
 La forêt prédit exactement 65,9 % des lettres et améliore le F1 macro par rapport à la référence. La classe C représente 40,3 % du test : prédire systématiquement C atteindrait cette accuracy, inférieure à celle de la forêt.
 
@@ -43,10 +44,11 @@ La Random Forest est retenue pour cette livraison. La comparaison reste descript
 La régression linéaire fournit une référence additive. La Random Forest Regressor représente des interactions non linéaires. En mode rapide, elle utilise 100 arbres, une profondeur maximale de 14 et au moins 3 observations par feuille.
 
 Les modèles sont comparés sur la même partition. Les erreurs sont calculées sur la cible originale, dans l’unité numérique de la source.
-Modèle	RMSE	MAE	R²
-Linéaire	18 727,3	4 915,5	0,265
-Random Forest	14 800,6	2 536,0	0,541
 
+| Modèle | RMSE | MAE | R² |
+|---|---:|---:|---:|
+| Linéaire | 18 727,3 | 4 915,5 | 0,265 |
+| Random Forest | 14 800,6 | 2 536,0 | 0,541 |
 
 La forêt réduit la MAE d’environ 48,4 % et la RMSE d’environ 21,0 %. La MAE mesure l’écart absolu moyen ; la RMSE pénalise davantage les grandes erreurs. Leur différence indique que certaines observations concentrent des erreurs importantes.
 
