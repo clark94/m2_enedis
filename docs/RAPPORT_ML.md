@@ -1,5 +1,3 @@
-Copie à partir du titre ci-dessous, jusqu’à la dernière ligne, dans **`docs/RAPPORT_ML.md`**. Les titres et les passages importants sont formatés pour GitHub.
-
 # Rapport d’étude — GreenTech Solutions
 
 **MAMPOUYA CLARK Chancy Loïc Franlly**  
