@@ -1,15 +1,60 @@
-VERSION CORRIGÉE — DASH / PYTHON 3.12
+GREENTECH SOLUTIONS — DÉMARRAGE
+Dash / Flask — Python 3.12
+
+INSTALLATION LOCALE
 
 1. Installer Python 3.12.
-2. Ouvrir un terminal dans ce dossier.
-3. python -m venv .venv
-4. Windows : .venv\Scripts\activate
-   Linux/Mac : source .venv/bin/activate
-5. pip install -r requirements.txt
-6. python app.py
-7. Ouvrir http://localhost:8051
+2. Ouvrir un terminal à la racine du projet.
 
-Avec Docker : docker compose up --build
-La commande Streamlit ne correspond plus à cette version.
+3. Créer l’environnement :
+   python -m venv .venv
 
-Lire docs/CONFORMITE.md avant le rendu. Vidéo à réaliser par Clark.
+4. Activer l’environnement :
+   Windows PowerShell : .\.venv\Scripts\Activate.ps1
+   Linux/macOS : source .venv/bin/activate
+
+5. Installer les dépendances :
+   python -m pip install -r requirements.txt
+
+6. Lancer l’application :
+   python app.py
+
+7. Ouvrir :
+   http://localhost:8050
+
+Arrêt : Ctrl+C.
+
+WINDOWS SANS ACTIVATION
+
+Si PowerShell bloque l’activation :
+   .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+   .\.venv\Scripts\python.exe app.py
+
+DÉMARRAGE AVEC DOCKER
+
+Démarrer Docker Desktop, puis exécuter depuis le dossier
+contenant docker-compose.yml :
+   docker compose up --build
+
+Ouvrir :
+   http://localhost:8051
+
+Arrêter :
+   docker compose down
+
+ACCÈS EN LIGNE
+
+Application :
+https://m2-enedis-z6dh.onrender.com/
+
+Vidéo de démonstration — 5 minutes :
+https://youtu.be/y1og0YCbLkA
+
+Vidéo privée : accès avec le compte Google invité.
+Sélectionner 1080p HD pour une meilleure lisibilité.
+
+DOCUMENTATION
+
+Consulter README.md et le dossier docs/.
+Cette version utilise Dash : aucune commande Streamlit
+n’est nécessaire.
