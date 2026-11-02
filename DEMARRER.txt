@@ -56,5 +56,3 @@ Sélectionner 1080p HD pour une meilleure lisibilité.
 DOCUMENTATION
 
 Consulter README.md et le dossier docs/.
-Cette version utilise Dash : aucune commande Streamlit
-n’est nécessaire.
