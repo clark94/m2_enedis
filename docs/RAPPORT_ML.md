@@ -1,7 +1,9 @@
 Rapport d’étude — GreenTech Solutions
+
 MAMPOUYA CLARK Chancy Loïc Franlly
 Master 2 SISE — Université Lumière Lyon 2
 1. Contexte, données et objectifs
+   
 GreenTech Solutions est une application d’exploration et de prédiction de la performance énergétique des logements. Le projet comprend deux tâches : prédire la classe DPE parmi les sept lettres A–G et estimer la consommation de chauffage en énergie finale, représentée par conso_chauffage_ef.
 
 Les données proviennent des diagnostics ADEME de logements existants et neufs du Rhône, de l’Isère et de la Loire. Le jeu étudié contient 65 467 observations, dont 65 455 disposent de la cible de régression. La collecte étant limitée par département et source, cet échantillon n’est ni exhaustif ni garanti représentatif des logements français. Plusieurs diagnostics d’un même logement peuvent subsister sous des identifiants différents.
