@@ -1,7 +1,7 @@
 # Rapport d’étude — GreenTech Solutions
 
 **MAMPOUYA CLARK Chancy Loïc Franlly**  
-**Master 2 SISE — Université Lumière Lyon 2**
+Master 2 SISE — Université Lumière Lyon 2
 
 ## 1. Contexte, données et objectifs
 
@@ -83,11 +83,11 @@ Les données préparées, modèles, métriques et scripts permettent la reproduc
 
 J’ai réalisé le projet individuellement : organisation, développement et modélisation. Le suivi des tâches a été commencé dans Azure DevOps. L’acceptation de cette organisation relève de l’enseignant, le sujet prévoyant initialement une équipe de trois.
 
-**Livrables :**
+### Livrables
 
-- **[Dépôt GitHub](https://github.com/clark94/m2_enedis)**
-- **[Application déployée](https://m2-enedis-z6dh.onrender.com/)**
-- **[Vidéo de démonstration — 5 minutes](https://youtu.be/y1og0YCbLkA)**
+- [Dépôt GitHub](https://github.com/clark94/m2_enedis)
+- [Application déployée](https://m2-enedis-z6dh.onrender.com/)
+- [Vidéo de démonstration — 5 minutes](https://youtu.be/y1og0YCbLkA)
 
 La vidéo est privée ; le professeur a été invité par e-mail. Pour une meilleure lisibilité, sélectionner la qualité **1080p HD** dans les paramètres du lecteur YouTube.
 
@@ -97,9 +97,9 @@ Les perspectives prioritaires sont une validation temporelle ou groupée, une an
 
 ### Sources et traçabilité
 
-- **ADEME — DPE existants :** https://data.ademe.fr/datasets/dpe03existant
-- **ADEME — DPE neufs :** https://data.ademe.fr/datasets/dpe02neuf
-- **API Découpage administratif :** https://geo.api.gouv.fr/
-- **Provenance de la population :** `data/processed/population.json`
-- **Résultats :** `models/metrics.json`
-- **Protocole :** `scripts/train_models.py`
+- [ADEME — DPE existants](https://data.ademe.fr/datasets/dpe03existant)
+- [ADEME — DPE neufs](https://data.ademe.fr/datasets/dpe02neuf)
+- [API Découpage administratif](https://geo.api.gouv.fr/)
+- Provenance de la population : `data/processed/population.json`
+- Résultats : `models/metrics.json`
+- Protocole : `scripts/train_models.py`
